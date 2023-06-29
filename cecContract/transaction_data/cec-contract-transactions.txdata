@@ -1,0 +1,58 @@
+[
+    {
+        "transactionName": "cecContractExists",
+        "transactionLabel": "A test cecContractExists transaction",
+        "arguments": [
+            "001"
+        ],
+        "transientData": {}
+    },
+    {
+        "transactionName": "createCecContract",
+        "transactionLabel": "A test createCecContract transaction",
+        "arguments": [
+            "001"
+        ],
+        "transientData": {
+            "privateValue": "some value"
+        }
+    },
+    {
+        "transactionName": "readCecContract",
+        "transactionLabel": "A test readCecContract transaction",
+        "arguments": [
+            "001"
+        ],
+        "transientData": {}
+    },
+    {
+        "transactionName": "updateCecContract",
+        "transactionLabel": "A test updateCecContract transaction",
+        "arguments": [
+            "001"
+        ],
+        "transientData": {
+            "privateValue": "some other value"
+        }
+    },
+    {
+        "transactionName": "deleteCecContract",
+        "transactionLabel": "A test deleteCecContract transaction",
+        "arguments": [
+            "001"
+        ],
+        "transientData": {}
+    },
+    {
+        "transactionName": "verifyCecContract",
+        "transactionLabel": "A test verifyCecContract transaction",
+        "arguments":[
+            "Org1MSP",
+            "001",
+            {
+                "privateValue": "some other value"
+            }
+        ],
+        "transientData": {}
+    }
+]
