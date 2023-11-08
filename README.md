@@ -12,6 +12,8 @@ If you didn't already, install the [Hyperledger Fabric](https://hyperledger-fabr
 
 First step is runnin the `startCecContract` transaction. This will create the cec contract and it's private data
 
+You can skip to the testing section to see how to run the transactions.[Testing](#testing)
+
 The following transaction arguments are required:
 ```json
 {
@@ -79,6 +81,42 @@ This transaction works differently than the others. the `index` argument is `cec
 ## Testing
 
 For testing purposes use the commands below
+
+
+```bash
+
+# start CEC Contract transient data
+export TRADING_EMAIL=$(echo -n "ross.little@atos.net" | base64 | tr -d \\n)
+
+export TRADING_PARAMS=$(echo -n "[{\"smartmeterId\":\"AAAe4567-e89b-12d3-a456-426614174555\",\"algParams\":\"x\"},{\"smartmeterId\":\"BBBe4567-e89b-12d3-a456-426614174555\",\"algParams\":\"x\"},{\"smartmeterId\":\"CCC4567-e89b-12d3-a456-426614174555\",\"algParams\":\"x\"}]" | base64 | tr -d \\n)
+```
+
+```bash
+
+# start CEC Contract
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C mychannel -n ${SC_NAME} --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"startCecContract","Args":["079","atos.com","2020-12-22T00:00Z","2030-12-22T00:00Z","trading","equality","1"]}' --transient "{\"contractedByEmail\":\"$TRADING_PARAMS\",\"cecTradingParams\":\"$TRADING_PARAMS\"}"
+```
+
+```bash
+
+# calculate CEC Trading transient data
+export TRADING_PERIOD=$(echo -n "2020-12-01T00:00:00" | base64 | tr -d \\n)
+
+export SMARTMETER_DATA=$(echo -n "[{\"smartmeterId\":\"AAAe4567-e89b-12d3-a456-426614174555\",\"c\":[0,150,10,13.1,10.4,11.8,10,13.1,10.4,11.8,10,13.1,10.4,11.8,10,13.1,10.4,11.8,10,13.1,10.4,11.8,10,13.1],\"p\":[163,50,10,13.1,22.4,10.8,10,13.1,22.4,10.8,10,13.1,22.4,10.8,10,13.1,22.4,10.8,10,13.1,22.4,10.8,10,13.1]},{\"smartmeterId\":\"BBBe4567-e89b-12d3-a456-426614174555\",\"c\":[200,100,10,13.1,10.4,11.8,10,13.1,10.4,11.8,10,13.1,10.4,11.8,10,13.1,10.4,11.8,10,13.1,10.4,11.8,10,13.1],\"p\":[100,200,10,13.1,22.4,10.8,10,13.1,22.4,10.8,10,13.1,22.4,10.8,10,13.1,22.4,10.8,10,13.1,22.4,10.8,10,13.1]},{\"smartmeterId\":\"CCC4567-e89b-12d3-a456-426614174555\",\"c\":[10.4,11.8,10,13.1,10.4,11.8,10,13.1,10.4,11.8,10,13.1,10.4,11.8,10,13.1,10.4,11.8,10,13.1,10.4,11.8,10,13.1],\"p\":[10.4,10.8,10,13.1,22.4,10.8,10,13.1,22.4,10.8,10,13.1,22.4,10.8,10,13.1,22.4,10.8,10,13.1,22.4,10.8,10,13.1]}]" | base64 | tr -d \\n)
+```
+
+```bash
+
+# calculate CEC Trading
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C mychannel -n ${SC_NAME} --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"calculateCECtrading","Args":["079"]}' --transient "{\"tradingPeriod\":\"$TRADING_PERIOD\",\"smartmeterData\":\"$SMARTMETER_DATA\"}"
+```
+
+```bash
+
+#query the ressult
+peer chaincode query -C mychannel -n ${SC_NAME} -c '{"function":"readCecYearMonth","Args":["0792020"]}'
+```
+
 
 ```bash
 
